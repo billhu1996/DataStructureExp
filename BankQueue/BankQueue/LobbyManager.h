@@ -7,11 +7,11 @@
 //
 
 #ifndef LobbyManager_h
-#define LobbyManager_h
-#include "Window.h"
 #include <iostream>
 #include <vector>
-#endif /* LobbyManager_h */
+#include "Window.h"
+#include "BankQueue.h"
+#define LobbyManager_h
 
 const int CashService = 0;
 const int NoneCashService = 1;
@@ -96,3 +96,5 @@ public:
         std::cout << "平均办理时间:" << totalHandleTime / customerCount << "分钟" <<std::endl;
     }
 };
+
+#endif /* LobbyManager_h */

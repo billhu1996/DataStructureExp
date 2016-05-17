@@ -22,8 +22,8 @@ int main(int argc, const char * argv[]) {
     cout << "请输入营业总时间: ";
     cin >> openingTime;
     LobbyManager manager = LobbyManager(cashWindow, noneCashWindow);
-    cout << time(NULL) << endl;
+    cout << "Start Time: " << time(NULL) << endl;
     manager.service(time(NULL) + openingTime);
-    cout << time(NULL) << endl;
+    cout << "End Time: " << time(NULL) << endl;
     return 0;
 }

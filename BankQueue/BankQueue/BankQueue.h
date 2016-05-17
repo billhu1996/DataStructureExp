@@ -7,10 +7,9 @@
 //
 
 #ifndef Queue_h
-#define Queue_h
 #include <time.h>
 #include "RandomTime.h"
-#endif /* Queue_h */
+#define Queue_h
 
 typedef struct QueueN {
     time_t ArrivalTime;
@@ -52,3 +51,5 @@ public:
         }
     }
 };
+
+#endif /* Queue_h */

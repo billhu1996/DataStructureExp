@@ -9,12 +9,11 @@
 #ifndef RandomTime_h
 #define RandomTime_h
 
-
-#endif /* RandomTime_h */
-
 class RandomTime {
 public:
     static int randomTime() {
         return random()%15;
     }
 };
+
+#endif /* RandomTime_h */

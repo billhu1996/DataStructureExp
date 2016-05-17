@@ -7,11 +7,10 @@
 //
 
 #ifndef Window_h
-#define Window_h
 #include <iostream>
 #include <unistd.h>
-#include "BankQueue.h"
-#endif /* Window_h */
+#include "RandomTime.h"
+#define Window_h
 
 class Window {
 public:
@@ -20,7 +19,7 @@ public:
         windowNumber = count;
         count++;
     }
-//    std::weak_ptr<LobbyManager> *delegate = NULL;
+    
     time_t available = 0;
     int windowNumber;
     void service(time_t time) {
@@ -28,3 +27,5 @@ public:
         available = time;
     }
 };
+
+#endif /* Window_h */
