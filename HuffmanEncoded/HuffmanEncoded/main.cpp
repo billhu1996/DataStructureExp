@@ -14,9 +14,32 @@ using namespace std;
 
 vector<int> weight = {5,4,3,2,1};
 string dic = "abcde";
-string testCode[2] = {"aabbcaa","eedeec"};
+vector<string> testCode = {"aabbcaa","eedeec"};
 
 int main(int argc, const char * argv[]) {
+    cout << "是否要输入数据?Y/N:";
+    string edit;
+    cin >> edit;
+    if (edit == "Y") {
+        weight.clear();
+        testCode.clear();
+        cout << "数据量n:";
+        int n;
+        int temp;
+        cin >> n;
+        cout << "请输入weight数组:";
+        for (int i = 0; i<n; i++) {
+            cin >> temp;
+            weight.push_back(temp);
+        }
+        cout << "请输入字典:";
+        cin >> dic;
+        cout << "请输入测试数据:";
+        for (int i = 0; i<n; i++) {
+            cin >> edit;
+            testCode.push_back(edit);
+        }
+    }
     HuffmanEncodedTree tree = HuffmanEncodedTree(dic, weight);
     for (int i = 0; i<2; i++) {
         string encoded = tree.encode(testCode[i]);
