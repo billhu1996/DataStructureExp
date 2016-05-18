@@ -12,14 +12,16 @@
 #include <vector>
 using namespace std;
 
+vector<int> weight = {5,4,3,2,1};
+string dic = "abcde";
+string testCode[2] = {"aabbcaa","eedeec"};
+
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    vector<HTNode> trees;
-    trees.push_back(HTNode(0));
-    auto a = trees[0];
-    trees.erase(trees.begin());
-    cout << a.weight;
-    cout << &a;
+    HuffmanEncodedTree tree = HuffmanEncodedTree(dic, weight);
+    for (int i = 0; i<2; i++) {
+        string encoded = tree.encode(testCode[i]);
+        string uncoded = tree.unEncode(encoded);
+        cout << encoded << endl << uncoded << endl;
+    }
     return 0;
 }

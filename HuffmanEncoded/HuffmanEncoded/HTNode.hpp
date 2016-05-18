@@ -15,18 +15,24 @@ public:
     HTNode *parent;
     HTNode *lChild;
     HTNode *rChild;
+    char code = NULL;
+    std::string encode;
     
-    HTNode(int weight) {
+    HTNode() {}
+    HTNode(int weight, char code) {
         parent = NULL;
         lChild = NULL;
         rChild = NULL;
         this->weight = weight;
+        this->code = code;
     }
     HTNode(HTNode *lChild, HTNode *rChild) {
-        parent = NULL;
+        this->parent = NULL;
         this->lChild = lChild;
         this->rChild = rChild;
-        weight = lChild->weight = rChild->weight;
+        lChild->parent = this;
+        rChild->parent = this;
+        this->weight = lChild->weight + rChild->weight;
     }
 };
 
