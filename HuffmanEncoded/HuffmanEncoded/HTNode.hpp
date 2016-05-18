@@ -12,11 +12,11 @@
 class HTNode {
 public:
     int weight;
-    HTNode *parent;
-    HTNode *lChild;
-    HTNode *rChild;
+    HTNode *parent = NULL;
+    HTNode *lChild = NULL;
+    HTNode *rChild = NULL;
     char code = NULL;
-    std::string encode;
+    std::string encode = "";
     
     HTNode() {}
     HTNode(int weight, char code) {

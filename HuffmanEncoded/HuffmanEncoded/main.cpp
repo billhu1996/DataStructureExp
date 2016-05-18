@@ -22,6 +22,12 @@ int main(int argc, const char * argv[]) {
         string encoded = tree.encode(testCode[i]);
         string uncoded = tree.unEncode(encoded);
         cout << encoded << endl << uncoded << endl;
+        cout << "----------------" << endl;
     }
+    for (int i = 0; i<tree.leafs.size(); i++) {
+        cout << tree.leafs[i]->code << ": " << tree.leafs[i]->encode << endl;
+    }
+    cout << "----------------" << endl;
+    cout << tree;
     return 0;
 }

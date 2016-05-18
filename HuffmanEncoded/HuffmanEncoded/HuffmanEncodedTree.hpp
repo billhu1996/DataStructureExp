@@ -33,7 +33,6 @@ public:
         }
         for (int i = 0; i<dictionary.size(); i++) {
             trees.push_back(new HTNode(weights[i], dictionary[i]));
-//            leafs.push_back(&trees[i]);
         }
         while (trees.size() > 1) {
             auto minIndex = trees.begin();
@@ -119,14 +118,71 @@ public:
                 } else if (j == leafs[i]->encode.size()) {
                     returnString += leafs[i]->code;
                     inString.erase(0, leafs[i]->encode.size());
-//                    for (int k = 0; k<leafs[i]->encode.size(); k++) {
-//                        returnString.erase(returnString.begin());
-//                    }
                     break;
                 }
             }
         }
         return returnString;
+    }
+    
+    friend std::ostream &operator<<(std::ostream &cout, HuffmanEncodedTree &tree) {
+        auto depth = tree.getDepth();
+        std::vector<HTNode*> node;
+        node.push_back(tree.firstNode);
+        for (int j = 0; j<depth; j++) {
+            for (int k = 0; k<node.size(); k++) {
+                for (int i = 0; i<depth/(j+1); i++) {
+                    cout << "   ";
+                }
+                if (node[k] != NULL) {
+                    if (node[k]->weight == 0) {
+                        cout << node[k]->code;
+                    } else {
+                        cout << node[k]->weight << node[k]->code;
+                    }
+                } else {
+                    cout << "   ";
+                }
+                for (int i = 0; i<depth/(j+1); i++) {
+                    cout << "  ";
+                }
+            }
+            cout << std::endl;
+            std::vector<HTNode*> temp;
+            for (int k = 0; k<node.size(); k++) {
+                if (node[k]->lChild == NULL) {
+                    temp.push_back(new HTNode());
+                    temp.push_back(new HTNode());
+                } else {
+                    temp.push_back(node[k]->lChild);
+                    temp.push_back(node[k]->rChild);
+                }
+            }
+            node = temp;
+        }
+        return cout;
+    }
+    
+    unsigned long getDepth() {
+        return _getDepth(firstNode);
+    }
+    
+    void preOrderRecursiveTraverse(void visit(HTNode &), HTNode *node) {
+        if (node == NULL) {
+            return;
+        }
+        visit(*node);
+        preOrderRecursiveTraverse(visit, node->lChild);
+        preOrderRecursiveTraverse(visit, node->rChild);
+    }
+private:
+    unsigned long _getDepth(HTNode *node) {
+        if (node == NULL) {
+            return 0;
+        }
+        unsigned long leftDepth = _getDepth(node->lChild);
+        unsigned long rightDepth = _getDepth(node->rChild);
+        return ((leftDepth > rightDepth) ? leftDepth : rightDepth) + 1;
     }
 };
 
