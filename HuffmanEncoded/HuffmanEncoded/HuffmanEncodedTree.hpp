@@ -131,7 +131,7 @@ public:
         node.push_back(tree.firstNode);
         for (int j = 0; j<depth; j++) {
             for (int k = 0; k<node.size(); k++) {
-                for (int i = 0; i<depth/(j+1); i++) {
+                for (int i = 0; i<depth/(j+1)+depth-j; i++) {
                     cout << "   ";
                 }
                 if (node[k] != NULL) {
@@ -141,9 +141,9 @@ public:
                         cout << node[k]->weight << node[k]->code;
                     }
                 } else {
-                    cout << "   ";
+                    cout << "  ";
                 }
-                for (int i = 0; i<depth/(j+1); i++) {
+                for (int i = 0; i<depth/(j+1)+depth-j; i++) {
                     cout << "  ";
                 }
             }
