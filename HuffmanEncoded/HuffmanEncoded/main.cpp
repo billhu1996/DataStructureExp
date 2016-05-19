@@ -20,11 +20,11 @@ int main(int argc, const char * argv[]) {
     cout << "是否要输入数据?Y/N:";
     string edit;
     cin >> edit;
+    int n;
     if (edit == "Y") {
         weight.clear();
         testCode.clear();
         cout << "数据量n:";
-        int n;
         int temp;
         cin >> n;
         cout << "请输入weight数组:";
@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     HuffmanEncodedTree tree = HuffmanEncodedTree(dic, weight);
-    for (int i = 0; i<2; i++) {
+    for (int i = 0; i<n; i++) {
         string encoded = tree.encode(testCode[i]);
         string uncoded = tree.unEncode(encoded);
         cout << encoded << endl << uncoded << endl;
