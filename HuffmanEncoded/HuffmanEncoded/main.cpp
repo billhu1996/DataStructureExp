@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     cout << "是否要输入数据?Y/N:";
     string edit;
     cin >> edit;
-    int n;
+    int n = 2;
     if (edit == "Y") {
         weight.clear();
         testCode.clear();
