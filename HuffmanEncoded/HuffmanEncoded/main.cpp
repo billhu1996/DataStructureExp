@@ -34,6 +34,8 @@ int main(int argc, const char * argv[]) {
         }
         cout << "请输入字典:";
         cin >> dic;
+        cout << "请输入测试数据量:";
+        cin >> n;
         cout << "请输入测试数据:";
         for (int i = 0; i<n; i++) {
             cin >> edit;
@@ -41,6 +43,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     HuffmanEncodedTree tree = HuffmanEncodedTree(dic, weight);
+    cout << "----------------" << endl;
     for (int i = 0; i<n; i++) {
         string encoded = tree.encode(testCode[i]);
         string uncoded = tree.unEncode(encoded);

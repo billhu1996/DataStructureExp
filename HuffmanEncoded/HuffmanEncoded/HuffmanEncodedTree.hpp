@@ -8,6 +8,8 @@
 
 #ifndef HuffmanEncodedTree_h
 #include "HTNode.hpp"
+#include <math.h>
+#include <iomanip>
 #include <vector>
 #include <string>
 #define HuffmanEncodedTree_h
@@ -24,42 +26,39 @@ public:
         this->dictionary = dictionary;
         this->weights = weights;
         firstNode = NULL;
-        createTree();
-        createEncodedDictionary();
+        createTree();//建立霍夫曼树
+        createEncodedDictionary();//建立编码字典
+        fullNodeCountPosition();
     }
     bool createTree() {
         if (weights.size() < dictionary.size()) {
             return false;
         }
         for (int i = 0; i<dictionary.size(); i++) {
-            trees.push_back(new HTNode(weights[i], dictionary[i]));
+            HTNode *node = new HTNode(weights[i], dictionary[i]);
+            trees.push_back(node);
+            leafs.push_back(node);
         }
         while (trees.size() > 1) {
-            auto minIndex = trees.begin();
+            auto minIndex = 0;
             HTNode *node1;
             HTNode *node2;
-            for (auto i = trees.begin(); i!=trees.end(); i++) {
-                if (trees[minIndex-trees.begin()]->weight > trees[i-trees.begin()]->weight) {
+            for (auto i = 0; i!=trees.end()-trees.begin(); i++) {
+                if (trees[minIndex]->weight > trees[i]->weight) {
                     minIndex = i;
                 }
             }
-            node1 = trees[minIndex-trees.begin()];
-            if (node1->lChild == NULL) {
-                leafs.push_back(node1);
-            }
-            trees.erase(minIndex);
+            node1 = trees[minIndex];
+            trees.erase(trees.begin() + minIndex);
             
-            minIndex = trees.begin();
-            for (auto i = trees.begin(); i!=trees.end(); i++) {
-                if (trees[minIndex-trees.begin()]->weight > trees[i-trees.begin()]->weight) {
+            minIndex = 0;
+            for (int i = 0; i!=trees.end() - trees.begin(); i++) {
+                if (trees[minIndex]->weight > trees[i]->weight) {
                     minIndex = i;
                 }
             }
-            node2 = trees[minIndex-trees.begin()];
-            if (node2->lChild == NULL) {
-                leafs.push_back(node2);
-            }
-            trees.erase(minIndex);
+            node2 = trees[minIndex];
+            trees.erase(trees.begin() + minIndex);
             trees.push_back(new HTNode(node1, node2));
         }
         firstNode = trees[0];
@@ -67,30 +66,28 @@ public:
     }
     
     bool createEncodedDictionary() {
-        for (auto i = leafs.begin(); i!=leafs.end(); i++) {
-            auto node = leafs[i-leafs.begin()];
+        for (auto i = 0; i<leafs.size(); i++) {
+            auto node = leafs[i];
             std::string tempString;
             std::string returnString;
             while (node != firstNode) {
                 if (node->parent->lChild == node) {
                     tempString += "0";
                     node = node->parent;
-                } else if (node->parent->rChild == node) {
+                } else {
                     tempString += "1";
                     node = node->parent;
-                } else {
-                    return false;
                 }
             }
             for (int i = int(tempString.size()); i>0; i--) {
                 returnString += tempString[i-1];
             }
-            leafs[i - leafs.begin()]->encode = returnString;
+            leafs[i]->encode = returnString;
         }
         return true;
     }
     
-    std::string encode(std::string inString) {
+    std::string encode(std::string inString) {//编码
         std::string returnString;
         for (int i = 0; i<inString.size(); i++) {
             for (int j = 0; j<leafs.size(); j++) {
@@ -103,7 +100,7 @@ public:
         return returnString;
     }
     
-    std::string unEncode(std::string inString) {
+    std::string unEncode(std::string inString) {//译码
         std::string returnString;
         while (inString.size() > 0) {
             for (int i = 0; i<leafs.size(); i++) {
@@ -131,32 +128,30 @@ public:
         node.push_back(tree.firstNode);
         for (int j = 0; j<depth; j++) {
             for (int k = 0; k<node.size(); k++) {
-                for (int i = 0; i<depth/(j+1)+depth-j; i++) {
+                if (k != 0) {
+                    node[k]->lengthWithPreNode = node[k]->positionX - node[k - 1]->positionX - 1;
+                } else {
+                    node[k]->lengthWithPreNode = node[k]->positionX;
+                }
+                for (int i = 0; i<node[k]->lengthWithPreNode; i++) {
                     cout << "   ";
                 }
                 if (node[k] != NULL) {
                     if (node[k]->weight == 0) {
-                        cout << node[k]->code;
+                        cout << "  ";
                     } else {
-                        cout << node[k]->weight << node[k]->code;
+                        cout << std::setw(2) << node[k]->weight;
                     }
+                    cout << std::setw(1) << node[k]->code;
                 } else {
-                    cout << "  ";
-                }
-                for (int i = 0; i<depth/(j+1)+depth-j; i++) {
-                    cout << "  ";
+                    cout << "   ";
                 }
             }
             cout << std::endl;
             std::vector<HTNode*> temp;
             for (int k = 0; k<node.size(); k++) {
-                if (node[k]->lChild == NULL) {
-                    temp.push_back(new HTNode());
-                    temp.push_back(new HTNode());
-                } else {
-                    temp.push_back(node[k]->lChild);
-                    temp.push_back(node[k]->rChild);
-                }
+                temp.push_back(node[k]->lChild);
+                temp.push_back(node[k]->rChild);
             }
             node = temp;
         }
@@ -165,6 +160,39 @@ public:
     
     unsigned long getDepth() {
         return _getDepth(firstNode);
+    }
+    
+    void fullNodeCountPosition() {
+        unsigned long depth = getDepth();
+        std::vector<HTNode*> node;
+        node.push_back(firstNode);
+        for (int i = 0; i < depth - 1; i++) {
+            std::vector<HTNode*> temp;
+            for (int k = 0; k < node.size(); k++) {
+                if (node[k]->lChild == NULL) {
+                    node[k]->lChild = new HTNode(node[k]);
+                    node[k]->rChild = new HTNode(node[k]);
+                }
+                temp.push_back(node[k]->lChild);
+                temp.push_back(node[k]->rChild);
+            }
+            node = temp;
+        }
+        std::vector<HTNode*> temp;
+        for (int j = int(depth - 1); j >= 0; j--) {
+            for (int i = 0; i < node.size(); i++) {
+                if (j == depth - 1) {
+                    node[i]->positionX = 2 * i;
+                } else {
+                    node[i]->positionX = (node[i]->lChild->positionX + node[i]->rChild->positionX) / 2;
+                }
+                if (i % 2 == 1) {
+                    temp.push_back(node[i]->parent);
+                }
+            }
+            node = temp;
+            temp.clear();
+        }
     }
     
     void preOrderRecursiveTraverse(void visit(HTNode &), HTNode *node) {
@@ -176,6 +204,7 @@ public:
         preOrderRecursiveTraverse(visit, node->rChild);
     }
 private:
+    
     unsigned long _getDepth(HTNode *node) {
         if (node == NULL) {
             return 0;
